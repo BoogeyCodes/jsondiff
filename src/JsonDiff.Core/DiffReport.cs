@@ -22,13 +22,16 @@ public static class DiffReport
             sb.AppendLine(change.ToString());
         }
 
-        var added = changes.Count(c => c.Kind == ChangeKind.Added);
-        var removed = changes.Count(c => c.Kind == ChangeKind.Removed);
-        var changed = changes.Count(c => c.Kind == ChangeKind.Changed);
         sb.AppendLine();
-        sb.Append($"{changes.Count} difference(s): {added} added, {removed} removed, {changed} changed.");
+        sb.Append(Summarize(changes).ToString());
         return sb.ToString();
     }
+
+    /// <summary>Counts of each kind of change.</summary>
+    public static DiffStats Summarize(IReadOnlyList<Change> changes) => new(
+        changes.Count(c => c.Kind == ChangeKind.Added),
+        changes.Count(c => c.Kind == ChangeKind.Removed),
+        changes.Count(c => c.Kind == ChangeKind.Changed));
 
     /// <summary>Machine-readable output for piping into other tools.</summary>
     public static string ToJson(IReadOnlyList<Change> changes)

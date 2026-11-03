@@ -30,6 +30,18 @@ public sealed class DiffReportTests
     }
 
     [Fact]
+    public void Summarize_counts_each_kind()
+    {
+        var stats = DiffReport.Summarize(Sample);
+        Assert.Equal(1, stats.Added);
+        Assert.Equal(1, stats.Removed);
+        Assert.Equal(1, stats.Changed);
+        Assert.Equal(3, stats.Total);
+        Assert.Equal("3 difference(s): 1 added, 1 removed, 1 changed.", stats.ToString());
+        Assert.Equal("No differences.", DiffReport.Summarize([]).ToString());
+    }
+
+    [Fact]
     public void Json_report_is_valid_and_carries_the_fields()
     {
         using var doc = JsonDocument.Parse(DiffReport.ToJson(Sample));

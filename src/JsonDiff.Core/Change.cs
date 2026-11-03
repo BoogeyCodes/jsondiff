@@ -7,6 +7,19 @@ public enum ChangeKind
     Changed,
 }
 
+/// <summary>How many changes of each kind a diff produced.</summary>
+/// <param name="Added">Values present only on the right.</param>
+/// <param name="Removed">Values present only on the left.</param>
+/// <param name="Changed">Values present on both sides but different.</param>
+public sealed record DiffStats(int Added, int Removed, int Changed)
+{
+    public int Total => Added + Removed + Changed;
+
+    public override string ToString() => Total == 0
+        ? "No differences."
+        : $"{Total} difference(s): {Added} added, {Removed} removed, {Changed} changed.";
+}
+
 /// <summary>
 /// A single difference between two JSON documents, located by a JSON-Pointer-style path.
 /// </summary>
